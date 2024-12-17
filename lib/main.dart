@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'routes.dart';
+import 'dart:html' as html;
 
 void main() {
   runApp(const MyApp());
@@ -11,6 +12,16 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
+    print("构建中");
+    // 在构建完成后发送消息
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      print("构建完成");
+      // 延迟 10 秒后执行
+      Future.delayed(Duration(seconds: 10), () {
+        // 发送消息到父窗口
+        html.window.parent?.postMessage({'action': 'on-code-ok'}, '*');
+      });
+    });
     return MaterialApp(
       title: 'Flutter Demo',
       theme: ThemeData(
